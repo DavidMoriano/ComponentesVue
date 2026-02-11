@@ -16,8 +16,6 @@ const agregarCita = (nuevaCita) => {
       texto: [nuevaCita.texto]   
     })
   }
-
-  console.log(listaCitas.value)
 }
 </script>
 

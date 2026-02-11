@@ -14,8 +14,16 @@ const citasDelDia = computed(() => {
     if (!diaSeleccionado.value) return []
     const fechaBuscada = `2021-02-${String(diaSeleccionado.value).padStart(2, '0')}`
     const citaEncontrada = props.citas.find(c => c.fecha === fechaBuscada)
-    console.log(citaEncontrada)
     return citaEncontrada ? citaEncontrada.texto : []
+})
+
+const diasConCitas = computed(() => {
+    const dias = new Set()
+    props.citas.forEach(cita => {
+        const dia = Number(cita.fecha.split('-')[2])
+        if (dia >= 1 && dia <= 28) dias.add(dia)
+    })
+    return dias
 })
 
 const diasFebrero = ref([
@@ -28,6 +36,11 @@ const diasFebrero = ref([
 const toggleDia = (dia) => {
     diaSeleccionado.value = diaSeleccionado.value === dia ? null : dia
 }
+
+const obtenerClaseDia = (dia) => ({
+    fondoVerde: dia === diaSeleccionado.value,
+    diaConCita: diasConCitas.value.has(dia)
+})
 </script>
 
 <template>
@@ -48,8 +61,7 @@ const toggleDia = (dia) => {
                     </thead>
                     <tbody>
                         <tr v-for="(semana, index) in diasFebrero" :key="index">
-                            <td v-for="dia in semana" :key="dia" :class="{ fondoVerde: dia === diaSeleccionado }"
-                                @dblclick="toggleDia(dia)">
+                            <td v-for="dia in semana" :key="dia" :class="obtenerClaseDia(dia)" @dblclick="toggleDia(dia)">
                                 {{ dia }}
                             </td>
                         </tr>
@@ -61,7 +73,7 @@ const toggleDia = (dia) => {
                 <p v-if="!diaSeleccionado">Selecciona un día del calendario</p>
                 <p v-else-if="citasDelDia.length === 0">No hay citas para ese día</p>
                 <ul v-else>
-                    <li v-for="texto in citasDelDia">
+                    <li v-for="texto in citasDelDia" :key="texto">
                         {{ texto }}
                     </li>
                 </ul>
@@ -125,7 +137,7 @@ th {
     font-weight: bold;
 }
 
-.diaSeleccionado {
+.diaConCita {
     color: red;
     font-size: 40px;
 }
