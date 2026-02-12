@@ -9,6 +9,7 @@ const props = defineProps({
 });
 
 const mostrarCuestionario = computed(() => {
+    console.log(props.cuestionarios);
     return props.cuestionarios;
 });
 
@@ -17,9 +18,19 @@ const mostrarCuestionario = computed(() => {
 <template>
     <div id="cuestionario">
         <div v-for="pregunta in mostrarCuestionario">
-            <p>{{ pregunta }}</p>
+            <p>{{ pregunta.pregunta }}</p>
+            <ul>
+                <li> <input type="checkbox" name="" id=""></input> {{ pregunta._1 }} </li>
+                <li> <input type="checkbox" name="" id=""></input> {{ pregunta._2 }}</li>
+                <li> <input type="checkbox" name="" id=""></input> {{ pregunta._3 }}</li>
+                <li> <input type="checkbox" name="" id=""></input> {{ pregunta._4 }}</li>
+            </ul>
         </div>
     </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+    li {
+        list-style: none;
+    }
+</style>

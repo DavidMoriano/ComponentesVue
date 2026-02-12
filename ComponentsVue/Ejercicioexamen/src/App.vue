@@ -129,29 +129,30 @@ const temario = ref(
   }
 );
 
-const cuestionarioCuestComp = ref([]);
 const temarioNuevo = ref([]);
 
 const agregarCuestionario = (nuevoCuestionario) => {
-  cuestionarioCuestComp.value.push({
-    numeroPreguntas: nuevoCuestionario.preguntas,
-    idTema: nuevoCuestionario.temaElegido
-  })
+  temarioNuevo.value = temario.value.preguntas.filter(c => c.tema == nuevoCuestionario.idTema);
+  if (nuevoCuestionario.preguntas < temarioNuevo.value.length)
+    temarioNuevo.value.length = nuevoCuestionario.preguntas;
+  console.log(temarioNuevo.value);
+}
 
-  let index = 0;
-  while (temario.value.preguntas.length > nuevoCuestionario.preguntas) {
-    if (pregunta[index].tema == nuevoCuestionario.temaElegido) {
-      temarioNuevo.value.push(pregunta[index]);
-    }
-    index++;
-  }
+const nuevoTema = (nuevoTema) => {
+  temario.value.temas.push(nuevoTema);
+}
 
-
-
+const nuevaPregunta = (nuevaPregunta) => {
+  temario.value.preguntas.push(nuevaPregunta);
+  console.log(temario.value.preguntas);
 }
 
 const temasSelect = computed(() => {
   return temario.value.temas;
+})
+
+const temarioANuevaPregunta = computed(() => {
+  return temario.value;
 })
 
 </script>
@@ -163,10 +164,10 @@ const temasSelect = computed(() => {
 
   <section id="formularios">
     <Cuestionario :temas="temasSelect" @agregar-cuestionario="agregarCuestionario"></Cuestionario>
-    <NuevoTema></NuevoTema>
-    <NuevaPregunta></NuevaPregunta>
+    <NuevoTema :temas="temasSelect" @agregar-tema="nuevoTema"></NuevoTema>
+    <NuevaPregunta :temario="temarioANuevaPregunta" @agregar-pregunta="nuevaPregunta"></NuevaPregunta>
   </section>
-  <NuevosCuestionarios :cuestionarios="cuestionarioCuestComp">
+  <NuevosCuestionarios :cuestionarios="temarioNuevo">
   </NuevosCuestionarios>
 </template>
 

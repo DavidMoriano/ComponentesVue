@@ -24,7 +24,7 @@ const generarCuestionario = (event) => {
 
     emit("agregar-cuestionario", {
         preguntas: numeroPreguntas.value,
-        temaElegido: temaElegido.value
+        idTema: temaElegido.value
     })
 
     temaElegido.value = "";
