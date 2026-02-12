@@ -18,13 +18,15 @@ const citasDelDia = computed(() => {
 })
 
 const diasConCitas = computed(() => {
-    const dias = new Set()
+    const dias = []
     props.citas.forEach(cita => {
         const dia = Number(cita.fecha.split('-')[2])
-        if (dia >= 1 && dia <= 28) dias.add(dia)
+        if (dia >= 1 && dia <= 28 && !dias.includes(dia)) {
+            dias.push(dia)
+        }
     })
-    return dias
-})
+    return dias;
+});
 
 const diasFebrero = ref([
     [1, 2, 3, 4, 5, 6, 7],
@@ -39,8 +41,9 @@ const toggleDia = (dia) => {
 
 const obtenerClaseDia = (dia) => ({
     fondoVerde: dia === diaSeleccionado.value,
-    diaConCita: diasConCitas.value.has(dia)
-})
+    diaConCita: diasConCitas.value.includes(dia)
+});
+
 </script>
 
 <template>
@@ -61,7 +64,8 @@ const obtenerClaseDia = (dia) => ({
                     </thead>
                     <tbody>
                         <tr v-for="(semana, index) in diasFebrero" :key="index">
-                            <td v-for="dia in semana" :key="dia" :class="obtenerClaseDia(dia)" @dblclick="toggleDia(dia)">
+                            <td v-for="dia in semana" :key="dia" :class="obtenerClaseDia(dia)"
+                                @dblclick="toggleDia(dia)">
                                 {{ dia }}
                             </td>
                         </tr>
