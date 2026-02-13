@@ -9,7 +9,6 @@ const props = defineProps({
 });
 
 const mostrarCuestionario = computed(() => {
-    console.log(props.cuestionarios);
     return props.cuestionarios;
 });
 
